@@ -21,13 +21,10 @@ def readupd(myurl):
 
 def parse(site):
     from lxml.html import parse
-    # Получаем страничку
     logme = 'log of session'
     page = parse('http://itsupp.com/downloads/nod_update/').getroot()
-    # Ищем все теги <a> с css классом topic
     hrefs = page.cssselect("a")
     for row in hrefs:
-     # Получаем атрибут href
         exp = row.get("href")
         if exp[0] != '?' and exp[len(exp)-1] != '/':
             logme = logme + "\n" + load(exp,site)
