@@ -47,5 +47,4 @@ def mailtoadmin(msg):
     server.quit()
     return print('Ok')
 
-#mailtoadmin(parse(site))
-print(parse(site))
+mailtoadmin(parse(site))
