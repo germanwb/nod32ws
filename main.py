@@ -1,6 +1,7 @@
 __author__ = 'german_or_jane'
 import urllib.request
 import smtplib
+import os
 
 site = "http://itsupp.com/downloads/nod_update/"
 
@@ -27,7 +28,8 @@ def parse(site):
     for row in hrefs:
         exp = row.get("href")
         if exp[0] != '?' and exp[len(exp)-1] != '/':
-            logme = logme + "\n" + load(exp,site)
+                if not os.path.exists('nod_update/'+exp) or exp == "update.ver":
+                    logme = logme + "\n" + load(exp,site)
     return logme
 def mailtoadmin(msg):
     fromaddr = 'Germanlog White  <log@nzmi.info>'
@@ -45,4 +47,5 @@ def mailtoadmin(msg):
     server.quit()
     return print('Ok')
 
-mailtoadmin(parse(site))
+#mailtoadmin(parse(site))
+print(parse(site))
