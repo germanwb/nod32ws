@@ -23,7 +23,7 @@ def load_auth(file,authkey):
         response = urlopen(request)
     except error.HTTPError as err:
         allok=False
-        return 'Trabl with'+file+'==>>'+err.code
+        return 'Trabl with'+file+'==>>'+str(err.code)
 
     if allok == True:
         s = response.read()
