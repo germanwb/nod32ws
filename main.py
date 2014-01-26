@@ -8,6 +8,9 @@ import down
 import unpack
 import get_key
 
+global develop
+develop = True
+
 global txtmail
 sistemname = 'Windows German Home'
 date = datetime.datetime.now()
@@ -50,16 +53,34 @@ def check_dif():
                 if current[keys].get('file'):
                     if new_ver[keys].get('version') !=  current[keys].get('version'):
                         tomail(keys+':  '+current[keys].get('version')+"====>"+new_ver[keys].get('version'))
-                        tomail(down.load_auth(new_ver[keys]['file'],auth))
+                        err = down.load_auth(new_ver[keys]['file'],auth)
+                        if err == '403':
+                            new_ver.pop(keys)
+                            if develop:
+                                print('удаляю ',keys)
+                        else:
+                            tomail(err)
                 else:
                     if new_ver[keys].get('language'):
                         if new_ver[keys]['language'] == '1049':
-                            tomail(down.load_auth(new_ver[keys]['file'],auth))
+                            err = down.load_auth(new_ver[keys]['file'],auth)
+                            if err == '403':
+                                new_ver.pop(keys)
+                                if develop:
+                                    print('удаляю ',keys)
+                            else:
+                                tomail(new_ver[keys]['file'],err)
                             new_ver[keys]['file']=new_ver[keys]['file'].split('/')[-1]
 
                     else:
                         new_ver[keys]['file']=new_ver[keys]['file'].split('/')[-1]
-                        tomail(down.load_auth(new_ver[keys]['file'],auth))
+                        err = down.load_auth(new_ver[keys]['file'],auth)
+                        if err == '403':
+                            if develop:
+                                print('удаляю ',keys)
+                                new_ver.pop(keys)
+                            else:
+                                tomail(err)
     return new_ver
 
 
@@ -74,10 +95,22 @@ def new_base():
         if new_ver[keys].get('file'):
             if new_ver[keys].get('language'):
                 if new_ver[keys]['language'] == '1049':
-                    tomail(down.load_auth(new_ver[keys]['file'],auth))
+                    err = down.load_auth(new_ver[keys]['file'],auth)
+                    if err == '403':
+                        new_ver.pop(keys)
+                        if develop:
+                            print('удаляю ',keys)
+                        else:
+                            tomail(err)
                     new_ver[keys]['file']=new_ver[keys]['file'].split('/')[-1]
             else:
-                tomail(down.load_auth(new_ver[keys]['file'],auth))
+                err = down.load_auth(new_ver[keys]['file'],auth)
+                if err == '403':
+                    new_ver.pop(keys)
+                    if develop:
+                        print('удаляю ',keys)
+                    else:
+                        tomail(err)
                 new_ver[keys]['file']=new_ver[keys]['file'].split('/')[-1]
     return new_ver
 
