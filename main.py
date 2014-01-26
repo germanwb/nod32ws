@@ -9,11 +9,13 @@ import unpack
 import get_key
 
 global txtmail
+sistemname = 'Windows German Home'
 date = datetime.datetime.now()
-txtmail = date.strftime("%d/%m/%y %H:%M")+"\n"
+txtmail = sistemname+ " at " + date.strftime("%d/%m/%y %H:%M")+"\n"
 def tomail(txt):
     global txtmail
     txtmail=txtmail+txt+"\n"
+    print(txt)
 
 def parse(name):
     f = open(name)
@@ -44,19 +46,20 @@ def check_dif():
         auth=['TRIAL-64582270','msfps6j264']
     for keys in new_ver.keys():
         if new_ver[keys].get('file'):
-            if current[keys].get('file'):
-                if new_ver[keys].get('version') !=  current[keys].get('version'):
-                    tomail(keys+current[keys].get('version')+"====>"+new_ver[keys].get('version'))
-                    tomail(down.load_auth(new_ver[keys]['file'],auth))
-            else:
-                if new_ver[keys].get('language'):
-                    if new_ver[keys]['language'] == '1049':
+            if current.get(keys):
+                if current[keys].get('file'):
+                    if new_ver[keys].get('version') !=  current[keys].get('version'):
+                        tomail(keys+':  '+current[keys].get('version')+"====>"+new_ver[keys].get('version'))
                         tomail(down.load_auth(new_ver[keys]['file'],auth))
-                        new_ver[keys]['file']=new_ver[keys]['file'].split('/')[-1]
-
                 else:
-                    new_ver[keys]['file']=new_ver[keys]['file'].split('/')[-1]
-                    tomail(down.load_auth(new_ver[keys]['file'],auth))
+                    if new_ver[keys].get('language'):
+                        if new_ver[keys]['language'] == '1049':
+                            tomail(down.load_auth(new_ver[keys]['file'],auth))
+                            new_ver[keys]['file']=new_ver[keys]['file'].split('/')[-1]
+
+                    else:
+                        new_ver[keys]['file']=new_ver[keys]['file'].split('/')[-1]
+                        tomail(down.load_auth(new_ver[keys]['file'],auth))
     return new_ver
 
 
@@ -118,4 +121,5 @@ def mailtoadmin(msg):
     server.quit()
 
 start()
-mailtoadmin(txtmail)
+print(txtmail)
+#mailtoadmin(txtmail)

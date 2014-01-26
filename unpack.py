@@ -3,6 +3,7 @@
 __author__ = 'german_or_jane'
 import os
 import urllib.request
+import sys
 def load_update():
     with urllib.request.urlopen('http://update.eset.com/eset_upd/update.ver') as url:
      s = url.read()
@@ -11,6 +12,13 @@ def load_update():
     f.close()
     mydir = os.getcwd()
     os.chdir(os.getcwd()+'/tmp')
-    os.system('./unrar x update.rar -o+ -inul')
+    if sys.platform == "win32":
+        print('Try')
+        os.system('UnRar.exe x update.rar -o+ -inul')
+        print('Ok')
+
+    else:
+        os.system('./unrar x update.rar -o+ -inul')
     os.chdir(mydir)
     return 'unpack OK'
+
