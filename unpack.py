@@ -16,7 +16,8 @@ def load_update():
         print('Try')
         os.system('UnRar.exe x update.rar -o+ -inul')
         print('Ok')
-
+    elif sys.platform == "linux2":
+        os.system('unrar x update.rar -o+ -inul')
     else:
         os.system('./unrar x update.rar -o+ -inul')
     os.chdir(mydir)

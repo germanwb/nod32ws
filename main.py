@@ -149,12 +149,9 @@ def check(updatever):
                     print(keys+' = Ok')
                     ckeckver[keys]=updatever[keys]
                 else:
-                    print(keys+' = err of size')
+                    tomail(keys+' = err of size')
             else:
-                print(keys+' = err of file '+updatever[keys]['file'])
-
-        else:
-            print(keys,' = not file item')
+                tomail(keys+' = err of file '+updatever[keys]['file'])
     return ckeckver
 
 def start():
