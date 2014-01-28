@@ -44,9 +44,7 @@ def check_dif():
     current = parse('base/update.ver')
     tomail(unpack.load_update())
     new_ver=parse('tmp/update.ver')
-    auth = get_key.get_key()
-    if auth == None:
-        auth=['TRIAL-64582270','msfps6j264']
+    auth=['TRIAL-64582270','msfps6j264']
     for keys in new_ver.keys():
         if new_ver[keys].get('file'):
             if current.get(keys):
@@ -126,18 +124,6 @@ def save_ver_file(new_ver):
     f.close()
     return 'all write'
 
-def start():
-    if os.path.exists('base/update.ver'):
-        tomail('>>>start diff>>>')
-        x = check_dif()
-        save_ver_file(x)
-        tomail(save_ver_file(x))
-
-    else:
-        tomail('generated new base>>>')
-        x = new_base()
-        save_ver_file(x)
-        tomail(save_ver_file(x))
 def mailtoadmin(msg):
     fromaddr = 'Germanlog White  <log@nzmi.info>'
     toaddr = 'Log Log <log@nzmi.info>'
@@ -152,6 +138,39 @@ def mailtoadmin(msg):
     server.login(username,password)
     server.sendmail(fromaddr, toaddr, msg)
     server.quit()
+
+def check(updatever):
+    ckeckver={}
+    for keys in updatever.keys():
+        if updatever[keys].get('file'):
+            updatever[keys]['file']=new_ver[keys]['file'].split('/')[-1]
+            if os.path.exists('base/'+updatever[keys]['file']):
+                if os.path.getsize('base/'+updatever[keys]['file']) != updatever[keys]['size']:
+                    print(keys+' = Ok')
+                    ckeckver[keys]=updatever[keys]
+                else:
+                    print(keys+' = err of size')
+            else:
+                print(keys+' = err of file '+updatever[keys]['file'])
+
+        else:
+            print(keys,' = not file item')
+    return ckeckver
+
+def start():
+    if os.path.exists('base/update.ver'):
+        tomail('>>>start diff>>>')
+        x = check_dif()
+        x = check(x)
+        save_ver_file(x)
+        tomail(save_ver_file(x))
+
+    else:
+        tomail('generated new base>>>')
+        x = new_base()
+        x = check(x)
+        save_ver_file(x)
+        tomail(save_ver_file(x))
 
 start()
 print(txtmail)
